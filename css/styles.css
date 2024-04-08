@@ -64,6 +64,18 @@
     padding: 40px;
 }
 
+.flash-msg-container {
+    background-color: #000;
+    padding: 15px;
+    border: solid #333;
+    border-width: 1px 0;
+}
+
+.flash-msg-container .alert {
+    width: 60%;
+    margin: 0 auto;
+}
+
 /* Footer */
 #footer {
     background-color: #000;

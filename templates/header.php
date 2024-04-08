@@ -1,6 +1,11 @@
 <?php
     require_once('globals.php');
     require_once('conection.php');
+
+    $flashMessage = [
+        // 'msg' => 'Teste',
+        // 'type' => 'danger'
+    ];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -46,3 +51,10 @@
                 </div>
             </nav>
         </header>
+        <?php if(!empty($flashMessage['msg'])): ?>
+            <div class="flash-msg-container">
+                <div class="alert alert-<?= $flashMessage['type'] ?>">
+                    <?= $flashMessage['msg'] ?>
+                </div>
+            </div>
+        <?php endif; ?>
