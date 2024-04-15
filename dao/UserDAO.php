@@ -46,7 +46,24 @@
         }
 
         public function findByEmail($email){
+            if($email != ''){
+                $stmt = $this->conn->prepare('SELECT * FROM users WHERE email = :email');
+                $stmt->bindParam(':email', $email);
+                $stmt->execute();
 
+                if($stmt->rowCount() > 0){
+                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $user = $this->buildUser($data);
+                    
+                    return $user;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
         }
 
         public function findById($id){
