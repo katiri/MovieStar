@@ -27,6 +27,7 @@
         public function authenticateUser($email, $password);
         public function findByEmail($email);
         public function findById($id);
-        public function findbyToken($token);
+        public function findByToken($token);
+        public function destroyToken();
         public function changePassword(User $user);
     }

@@ -52,7 +52,21 @@
         }
 
         public function verifyToken($protected = false){
+            if(!empty($_SESSION['token'])){
+                $token = $_SESSION['token'];
 
+                $user = $this->findByToken($token);
+
+                if($user){
+                    return $user;
+                }
+                else if($protected){
+                    $this->message->setMessage('Você precisa estar logado para acessar essa página', 'danger', 'index.php');
+                }
+            }
+            else if($protected){
+                $this->message->setMessage('Você precisa estar logado para acessar essa página', 'danger', 'index.php');
+            }
         }
 
         public function setTokenToSession($token, $redirect = true){
@@ -94,8 +108,33 @@
 
         }
 
-        public function findbyToken($token){
+        public function findByToken($token){
+            if($token != ''){
+                $stmt = $this->conn->prepare('SELECT * FROM users WHERE token = :token');
+                $stmt->bindParam(':token', $token);
+                $stmt->execute();
 
+                if($stmt->rowCount() > 0){
+                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $user = $this->buildUser($data);
+                    
+                    return $user;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+
+        public function destroyToken(){
+            // Remove token da sessão
+            $_SESSION['token'] = '';
+
+            // Redirecionar e apresentar mensagem de sucesso
+            $this->message->setMessage('Você fez logout com sucesso', 'light', 'index.php');
         }
 
         public function changePassword(User $user){
