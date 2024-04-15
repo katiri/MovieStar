@@ -1,11 +1,15 @@
 <?php
     require_once('globals.php');
     require_once('conection.php');
+    require_once('models/Message.php');
 
-    $flashMessage = [
-        // 'msg' => 'Teste',
-        // 'type' => 'danger'
-    ];
+    $message = new Message($BASE_URL);
+
+    $flashMessage = $message->getMessage();
+
+    if(!empty($flashMessage['msg'])){
+        $message->clearMessage();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
