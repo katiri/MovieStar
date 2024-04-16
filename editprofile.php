@@ -10,7 +10,7 @@
     $fullname = $user->getFullName($userData);
     $image = $user->getImage($userData);
 ?>
-    <div id="main-container" class="container-fluid">
+    <div id="main-container" class="container-fluid edit-profile-page">
         <div class="col-md-12">
             <form action="<?= $BASE_URL ?>user_process.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="type" value="update">
@@ -30,7 +30,7 @@
                             <label for="email">E-mail:</label>
                             <input type="text" readonly name="email" value="<?= $userData->email ?>" id="email" class="form-control disabled" placeholder="Digite seu sobrenome">
                         </div>
-                        <input type="submit" value="Alterar" class="btn form-btn">
+                        <input type="submit" value="Alterar" class="btn card-btn">
                     </div>
                     <div class="col-md-4">
                         <div id="profile-image-container" style="background-image: url('<?= $BASE_URL ?>img/users/<?= $image ?>');"></div>
@@ -59,7 +59,7 @@
                             <label for="confirmpassword">Confirmação de senha:</label>
                             <input type="password" name="confirmpassword" id="confirmpassword" class="form-control" placeholder="Confirme a sua nova senha">
                         </div>
-                        <input type="submit" value="Alterar senha" class="btn form-btn">
+                        <input type="submit" value="Alterar senha" class="btn card-btn">
                     </form>
                 </div>
             </div>
