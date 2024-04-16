@@ -9,6 +9,8 @@
 
     $userDao = new UserDAO($conn, $BASE_URL);
 
+    $user = $userDao->verifyToken(true);
+
     // Resgata o tipo do formulário
     $type = filter_input(INPUT_POST, 'type');
 
@@ -18,8 +20,6 @@
         $lastname = filter_input(INPUT_POST, 'lastname');
         $email = filter_input(INPUT_POST, 'email');
         $bio = filter_input(INPUT_POST, 'bio');
-        
-        $user = $userDao->verifyToken();
 
         $user->name = $name;
         $user->lastname = $lastname;
@@ -59,7 +59,16 @@
         $userDao->update($user, true);
     }
     else if($type === 'changepassword'){
-        
+        $password = filter_input(INPUT_POST, 'password');
+        $confirmpassword = filter_input(INPUT_POST, 'confirmpassword');
+
+        if($password === $confirmpassword){
+            $finalPassword = $user->generatePassword($password);
+
+            $user->password = $finalPassword;
+
+            $userDao->changePassword($user);
+        }
     }
     else{
         $message->setMessage('Informações inválidas!', 'danger', 'index.php');
