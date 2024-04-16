@@ -19,14 +19,44 @@
         $email = filter_input(INPUT_POST, 'email');
         $bio = filter_input(INPUT_POST, 'bio');
         
-        $userData = $userDao->verifyToken();
+        $user = $userDao->verifyToken();
 
-        $userData->name = $name;
-        $userData->lastname = $lastname;
-        $userData->email = $email;
-        $userData->bio = $bio;
+        $user->name = $name;
+        $user->lastname = $lastname;
+        $user->email = $email;
+        $user->bio = $bio;
 
-        $userDao->update($userData, true);
+        // Upload da imagem
+        if(isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])){
+            $image = $_FILES['image'];
+            
+            $imageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            
+            // Checando tipo do arquivo
+            if(in_array($image['type'], $imageTypes)){
+                if(in_array($image['type'], ['image/jpeg', 'image/jpg'])){
+                    $imageFile = imagecreatefromjpeg($image['tmp_name']);
+                }
+                else{
+                    $imageFile = imagecreatefrompng($image['tmp_name']);
+                }
+
+                $imageName = $user->imageGenerateName();
+
+                imagejpeg($imageFile, './img/users/' . $imageName, 100);
+
+                if($user->image){
+                    unlink('./img/users/' . $user->image);
+                }
+
+                $user->image = $imageName;
+            }
+            else{
+                $message->setMessage('Só é permitido o upload de imagens do tipo png, jpg e jpeg', 'danger', 'back');
+            }
+        }
+
+        $userDao->update($user, true);
     }
     else if($type === 'changepassword'){
         
