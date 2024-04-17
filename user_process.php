@@ -53,6 +53,7 @@
             }
             else{
                 $message->setMessage('Só é permitido o upload de imagens do tipo png, jpg e jpeg', 'danger', 'back');
+                exit;
             }
         }
 
@@ -68,6 +69,9 @@
             $user->password = $finalPassword;
 
             $userDao->changePassword($user);
+        }
+        else{
+            $message->setMessage('As senhas não são iguais', 'danger', 'back');
         }
     }
     else{
