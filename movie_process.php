@@ -1,0 +1,89 @@
+<?php
+    require_once('globals.php');
+    require_once('conection.php');
+    require_once('models/Movie.php');
+    require_once('models/Message.php');
+    require_once('dao/MovieDAO.php');
+    require_once('dao/UserDAO.php');
+
+    $message = new Message($BASE_URL);
+
+    $userDao = new UserDAO($conn, $BASE_URL);
+    $movieDao = new MovieDAO($conn, $BASE_URL);
+
+    $user = $userDao->verifyToken(true);
+
+    // Resgata o tipo do formulário
+    $type = filter_input(INPUT_POST, 'type');
+
+    // Verifica o tipo de formulário
+    if($type === 'create'){
+        $title = filter_input(INPUT_POST, 'title');
+        $length = filter_input(INPUT_POST, 'length');
+        $category = filter_input(INPUT_POST, 'category');
+        $trailer = filter_input(INPUT_POST, 'trailer');
+        $description = filter_input(INPUT_POST, 'description');
+        
+        $users_id = $user->id;
+
+        $movie = new Movie();
+
+        // Validação mínima de dados
+        if($title && $description && $category){
+            $movie->title = $title;
+            $movie->length = $length;
+            $movie->category = $category;
+            $movie->trailer = $trailer;
+            $movie->description = $description;
+
+            // Upload da imagem
+            if(isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])){
+                $image = $_FILES['image'];
+                
+                $imageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                
+                // Checando tipo do arquivo
+                if(in_array($image['type'], $imageTypes)){
+                    if(in_array($image['type'], ['image/jpeg', 'image/jpg'])){
+                        $imageFile = imagecreatefromjpeg($image['tmp_name']);
+                    }
+                    else{
+                        $imageFile = imagecreatefrompng($image['tmp_name']);
+                    }
+
+                    $imageName = $movie->imageGenerateName();
+
+                    imagejpeg($imageFile, './img/movies/' . $imageName, 100);
+
+                    if($user->image){
+                        unlink('./img/movies/' . $movie->image);
+                    }
+
+                    $movie->image = $imageName;
+                }
+                else{
+                    $message->setMessage('Só é permitido o upload de imagens do tipo png, jpg e jpeg', 'danger', 'back');
+                }
+            }
+
+            $movieDao->create($movie);
+        }
+        else{
+            $message->setMessage('Você precisa preencher pelo menos: título, descrição e categoria', 'danger', 'back');
+        }
+    }
+    else if($type === 'changepassword'){
+        $password = filter_input(INPUT_POST, 'password');
+        $confirmpassword = filter_input(INPUT_POST, 'confirmpassword');
+
+        if($password === $confirmpassword){
+            $finalPassword = $user->generatePassword($password);
+
+            $user->password = $finalPassword;
+
+            $userDao->changePassword($user);
+        }
+    }
+    else{
+        $message->setMessage('Informações inválidas!', 'danger', 'index.php');
+    }

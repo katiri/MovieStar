@@ -10,7 +10,7 @@
         <div class="offset-md-4 col-md-4 new-movie-container">
             <h1 class="page-title">Adicionar filme</h1>
             <p class="page-description">Adcione sua crítica e compartilhe com o mundo!</p>
-            <form action="<?= $BASE_URL ?>movie_process" method="post" id="add-movie-form" enctype="multipart/form-data">
+            <form action="<?= $BASE_URL ?>movie_process.php" method="post" id="add-movie-form" enctype="multipart/form-data">
                 <input type="hidden" name="type" value="create">
                 <div class="form-group">
                     <label for="title">Título:</label>

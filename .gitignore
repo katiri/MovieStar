@@ -1,1 +1,3 @@
 img/users/*.jpg
+img/movies/*.jpg
+!img/movies/movie_cover.jpg
