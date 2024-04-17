@@ -63,6 +63,7 @@
                 }
                 else{
                     $message->setMessage('Só é permitido o upload de imagens do tipo png, jpg e jpeg', 'danger', 'back');
+                    exit;
                 }
             }
 
