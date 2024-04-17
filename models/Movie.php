@@ -9,6 +9,20 @@
         public $length;
         public $users_id;
 
+        public function getTrailer(){
+            if($this->trailer){
+                if(strpos($this->trailer, '?v=') && strpos($this->trailer, 'youtube')){
+                    return explode('?v=', $this->trailer)[1];
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+
         public function getImage(){
             return $this->image ? $this->image : 'movie_cover.jpg';
         }
