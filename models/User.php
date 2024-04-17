@@ -9,12 +9,12 @@
         public $bio;
         public $token;
 
-        public function getFullName($user){
-            return $user->name . " " . $user->lastname;
+        public function getFullName(){
+            return $this->name . " " . $this->lastname;
         }
 
-        public function getImage($user){
-            return $user->image ? $user->image : 'user.png';
+        public function getImage(){
+            return $this->image ? $this->image : 'user.png';
         }
 
         public function generateToken(){

@@ -2,13 +2,12 @@
     require_once('templates/header.php');
     require_once('dao/UserDAO.php');
 
-    $user = new User();
     $userDao = new UserDAO($conn, $BASE_URL);
 
     $userData = $userDao->verifyToken(true);
 
-    $fullname = $user->getFullName($userData);
-    $image = $user->getImage($userData);
+    $fullname = $userData->getFullName();
+    $image = $userData->getImage();
 ?>
     <div id="main-container" class="container-fluid edit-profile-page">
         <div class="col-md-12">
