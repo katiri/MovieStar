@@ -88,7 +88,24 @@
             return $movies;
         }
 
-        public function findById($id){}
+        public function findById($id){
+            $stmt = $this->conn->prepare('SELECT * FROM movies WHERE id = :id');
+
+            $stmt->bindParam(':id', $id);
+
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+                $movieData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $movie = $this->buildMovie($movieData);
+
+                return $movie;
+            }
+            else{
+                return false;
+            }
+        }
 
         public function findByTitle($title){}
 
