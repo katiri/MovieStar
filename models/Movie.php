@@ -9,6 +9,10 @@
         public $length;
         public $users_id;
 
+        public function getImage(){
+            return $this->image ? $this->image : 'movie_cover.png';
+        }
+
         public function imageGenerateName(){
             return bin2hex(random_bytes(60)) . '.jpg';
         }
