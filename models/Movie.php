@@ -10,7 +10,7 @@
         public $users_id;
 
         public function getImage(){
-            return $this->image ? $this->image : 'movie_cover.png';
+            return $this->image ? $this->image : 'movie_cover.jpg';
         }
 
         public function imageGenerateName(){
