@@ -23,8 +23,6 @@
         $category = filter_input(INPUT_POST, 'category');
         $trailer = filter_input(INPUT_POST, 'trailer');
         $description = filter_input(INPUT_POST, 'description');
-        
-        $users_id = $user->id;
 
         $movie = new Movie();
 
@@ -56,10 +54,6 @@
 
                     imagejpeg($imageFile, './img/movies/' . $imageName, 100);
 
-                    if($user->image){
-                        unlink('./img/movies/' . $movie->image);
-                    }
-
                     $movie->image = $imageName;
                 }
                 else{
@@ -74,16 +68,25 @@
             $message->setMessage('Você precisa preencher pelo menos: título, descrição e categoria', 'danger', 'back');
         }
     }
-    else if($type === 'changepassword'){
-        $password = filter_input(INPUT_POST, 'password');
-        $confirmpassword = filter_input(INPUT_POST, 'confirmpassword');
+    else if($type === 'delete'){
+        $id = filter_input(INPUT_POST, 'id');
 
-        if($password === $confirmpassword){
-            $finalPassword = $user->generatePassword($password);
+        $movie = $movieDao->findById($id);
 
-            $user->password = $finalPassword;
+        if($movie){
+            if($movie->users_id === $user->id){
+                $movieDao->destroy($movie->id);
 
-            $userDao->changePassword($user);
+                if($movie->image){
+                    unlink('./img/movies/' . $movie->image);
+                }
+            }
+            else{
+                $message->setMessage('Você não cadastrou esse filme e não pode apaga-lo', 'danger', 'dashboard.php');
+            }
+        }
+        else{
+            $message->setMessage('Filme não econtrado', 'danger', 'dashboard.php');
         }
     }
     else{
