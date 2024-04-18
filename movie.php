@@ -26,7 +26,7 @@
     }
 
     if($userData){
-        $userOwnsMovie = true ? $userData->id === $movie->users_id : false;
+        $userOwnsMovie = $userData->id === $movie->users_id ? true : false;
         $alreadyReview = false;
     }
 ?>
