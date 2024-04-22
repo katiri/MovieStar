@@ -89,6 +89,27 @@
         }
 
         public function getRatings($id){
+            $stmt = $this->conn->prepare('SELECT * FROM reviews WHERE movies_id = :movies_id');
 
+            $stmt->bindParam(':movies_id', $id);
+
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+                $media = 0;
+
+                $reviewsArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach($reviewsArray as $review){
+                    $media += $review['rating'];
+                }
+                
+                $media /= count($reviewsArray);
+            }
+            else{
+                $media = 'Sem nota';
+            }
+
+            return $media;
         }
     }
